@@ -100,56 +100,64 @@ def create_title_slide(prs: Presentation, slide_data: Dict[str, str]):
 
 
 def get_available_content_layouts(prs: Presentation) -> List[int]:
-    """自动检测模板中可用的内容布局（包含段落占位符的布局）"""
+    """自动检测模板中可用的内容布局（必须同时包含标题和内容占位符的布局）"""
     available_layouts = []
-    
+
     for i, layout in enumerate(prs.slide_layouts):
         # 跳过布局0（通常是标题页布局）
         if i == 0:
             continue
-            
+
         # 检查是否有标题占位符（索引0）和内容占位符
         has_title = False
         has_content = False
-        
+
         try:
             for placeholder in layout.placeholders:
                 # 检查是否为标题占位符
                 if placeholder.placeholder_format.idx == 0:
                     has_title = True
                 # 检查是否为内容占位符（有text_frame且不是标题）
-                elif (hasattr(placeholder, 'text_frame') and 
-                      placeholder.placeholder_format.idx != 0):
+                elif (
+                    hasattr(placeholder, "text_frame")
+                    and placeholder.placeholder_format.idx != 0
+                ):
                     has_content = True
-            
-            # 如果同时有标题和内容占位符，则认为是可用的内容布局
+
+            # 只有同时具备标题和内容占位符才认为是可用的内容布局
             if has_title and has_content:
                 available_layouts.append(i)
                 if LOGGING_CONFIG.get("show_debug_info", False):
-                    print(f"  🔍 发现可用布局: {i}")
+                    print(f"  🔍 发现可用布局: {i} (标题✓ 内容✓)")
+            else:
+                if LOGGING_CONFIG.get("show_debug_info", False):
+                    title_status = "✓" if has_title else "✗"
+                    content_status = "✓" if has_content else "✗"
+                    print(f"  ❌ 布局 {i} 不可用 (标题{title_status} 内容{content_status})")
         except Exception as e:
             if LOGGING_CONFIG.get("show_debug_info", False):
                 print(f"  ⚠️ 检查布局 {i} 时出错: {e}")
             continue
-    
+
     if LOGGING_CONFIG.get("show_debug_info", False):
         print(f"  📋 模板中可用的内容布局: {available_layouts}")
-    
+
     return available_layouts
 
 
 # 缓存布局检测结果，避免重复检测
 _layout_cache = {}
 
+
 def get_random_content_layout(prs: Presentation) -> int:
     """随机选择一个内容布局"""
     # 检查是否使用自动检测
     use_auto_detection = PPT_CONFIG.get("auto_detect_layouts", True)
-    
+
     if use_auto_detection:
         # 创建缓存键（基于模板的布局数量）
         cache_key = len(prs.slide_layouts)
-        
+
         # 检查缓存
         if cache_key in _layout_cache:
             available_layouts = _layout_cache[cache_key]
@@ -159,7 +167,7 @@ def get_random_content_layout(prs: Presentation) -> int:
             # 自动检测可用布局并缓存
             available_layouts = get_available_content_layouts(prs)
             _layout_cache[cache_key] = available_layouts
-        
+
         if not available_layouts:
             print("⚠️ 未检测到可用的内容布局，使用默认布局1")
             return 1
@@ -169,7 +177,7 @@ def get_random_content_layout(prs: Presentation) -> int:
         if not available_layouts:
             print("⚠️ 配置中无可用布局，使用默认布局1")
             return 1
-    
+
     return random.choice(available_layouts)
 
 
@@ -308,8 +316,17 @@ def create_presentation(
     else:
         filename = f"{suggested_filename}.pptx"
 
+    # 创建Output文件夹（如果不存在）
+    output_dir = "Output"
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+        print(f"📁 创建输出目录: {output_dir}")
+
+    # 生成完整的文件路径
+    full_path = os.path.join(output_dir, filename)
+
     print(f"\n📊 开始创建演示文稿: {presentation_title}")
-    print(f"📁 文件名: {filename}")
+    print(f"📁 文件路径: {full_path}")
 
     slides = ppt_data.get("slides", [])
 
@@ -338,8 +355,8 @@ def create_presentation(
             create_content_slide(prs, slide_data)
 
     # 保存文件
-    prs.save(filename)
-    return filename
+    prs.save(full_path)
+    return full_path
 
 
 def get_openai_client(base_url: str = None, api_key: str = None) -> OpenAI:
