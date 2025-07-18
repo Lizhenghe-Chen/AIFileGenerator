@@ -17,7 +17,7 @@ client = OpenAI(
 mode = StreamMode.CHUNK  # 可选: StreamMode.CHAR, StreamMode.CHUNK, StreamMode.ALL
 model_path = "./qwen2.5-32b"
 messages = [
-    {"role": "user", "content": "给我一个10000字的故事"},
+    {"role": "user", "content": "给我一个1000字的故事"},
 ]
 
 
