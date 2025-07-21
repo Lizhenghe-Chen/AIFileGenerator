@@ -1,5 +1,3 @@
-from typing import *
-
 import json
 
 from openai import OpenAI
@@ -8,14 +6,21 @@ from tools import tools, tool_map  # Import tools and tool_map from the new scri
 
 client = OpenAI(
     api_key="sk-DxZqzv54xwqXgzZxuSP8Trp6L8Jkqa1anWPUKP5DWBNiEruW",  # 在这里将 MOONSHOT_API_KEY 替换为你从 Kimi 开放平台申请的 API Key
-    base_url="http://10.120.47.138:11434/v1",
+    # base_url="http://10.120.47.138:11434/v1",
+    base_url="http://localhost:11434/v1",
 )
-messages = [
-    {"role": "system", "content": "你是 Kimi，由 Moonshot AI 提供的人工智能助手。"},
-    {
-        "role": "user",
-        "content": "无人机'Alpha'现在的状态是什么，以及现在天气如何？",
-    },  
+from openai.types.chat import (
+    ChatCompletionSystemMessageParam,
+    ChatCompletionUserMessageParam,
+)
+
+messages: list = [
+    ChatCompletionSystemMessageParam(
+        role="system", content="你是 Kimi，由 Moonshot AI 提供的人工智能助手。"
+    ),
+    ChatCompletionUserMessageParam(
+        role="user", content="无人机'Alpha'现在的状态是什么，以及现在天气如何？此外，需要设置一个明天早上7：30的重复闹钟，同时提醒我要自慰，以及下午3：30的闹钟。"
+    ),
 ]
 
 finish_reason = None
@@ -27,16 +32,17 @@ finish_reason = None
 #   2. 如果 Kimi 大模型认为当前的工具调用
 while finish_reason is None or finish_reason == "tool_calls":
     completion = client.chat.completions.create(
-        model="./qwen2.5-32b",
+        # model="./qwen2.5-32b",
+        model="qwen2.5:latest",
         messages=messages,
         temperature=0.3,
-        tools=tools,  # Use the imported tools
+        tools=tools,  # Use the imported tools # type: ignore
     )
     choice = completion.choices[0]
     finish_reason = choice.finish_reason
     if finish_reason == "tool_calls":
-        messages.append(choice.message)
-        for tool_call in choice.message.tool_calls:
+        messages.append(choice.message.model_dump())
+        for tool_call in choice.message.tool_calls:  # type: ignore
             tool_call_name = tool_call.function.name
             tool_call_arguments = json.loads(tool_call.function.arguments)
             tool_function = tool_map[tool_call_name]  # Use the imported tool_map
@@ -54,5 +60,4 @@ while finish_reason is None or finish_reason == "tool_calls":
                     "content": json.dumps(tool_result),
                 }
             )
-
-print(choice.message.content)
+print(choice.message.content)  # type: ignore

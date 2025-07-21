@@ -1,4 +1,5 @@
 from typing import *
+from datetime import datetime, timedelta
 
 # Implementation of the search tool
 def search_impl(query: str) -> List[Dict[str, Any]]:
@@ -27,7 +28,7 @@ def crawl_impl(url: str) -> str:
     """
     return f"Test content for URL: {url}"
 
-def crawl(arguments: dict) -> str:
+def crawl(arguments: dict) -> dict:
     url = arguments["url"]
     content = crawl_impl(url)
     return {"content": content}
@@ -51,11 +52,48 @@ def drone_data_query_impl(query: str) -> List[Dict[str, Any]]:
     Fetches drone-related data based on a query. This is a placeholder implementation.
     Replace with actual logic to fetch drone data.
     """
-    return {"drone_id": 101, "status": "Destroyed", "location": "Area 51"}
+    return [{"drone_id": 101, "status": "Destroyed", "location": "Area 51"}]
 
 def drone_data_query(arguments: Dict[str, Any]) -> Any:
     query = arguments["query"]
     result = drone_data_query_impl(query)
+    return {"result": result}
+
+# Updated implementation of the set alarm tool with current time consideration
+def set_alarm_impl(time: str, message: str, date: Optional[str] = None, repeat: Optional[str] = "none", timezone: Optional[str] = None) -> str:
+    """
+    Sets an alarm for a specific time with a message, date, repeat frequency, and timezone.
+    Considers the current time and adjusts the alarm date if necessary.
+    """
+    current_time = datetime.now()
+
+    # Parse the provided time and date
+    alarm_time = datetime.strptime(time, "%H:%M").time()
+    alarm_date = datetime.strptime(date, "%Y-%m-%d").date() if date else current_time.date()
+
+    # Combine date and time into a datetime object
+    alarm_datetime = datetime.combine(alarm_date, alarm_time)
+
+    # If the alarm time is in the past, adjust the date
+    if alarm_datetime < current_time:
+        alarm_datetime += timedelta(days=1)
+
+    # Format the alarm details
+    alarm_details = f"Alarm set for {alarm_datetime.strftime('%Y-%m-%d %H:%M')}"
+    if repeat and repeat != "none":
+        alarm_details += f" (repeats {repeat})"
+    if timezone:
+        alarm_details += f" in timezone {timezone}"
+    alarm_details += f" with message: '{message}'"
+    return alarm_details
+
+def set_alarm(arguments: Dict[str, Any]) -> Any:
+    time = arguments["time"]
+    message = arguments["message"]
+    date = arguments.get("date")
+    repeat = arguments.get("repeat", "none")
+    timezone = arguments.get("timezone")
+    result = set_alarm_impl(time, message, date, repeat, timezone)
     return {"result": result}
 
 # Mapping of tool names to their corresponding functions
@@ -64,6 +102,7 @@ tool_map = {
     "crawl": crawl,
     "weather_query": weather_query,
     "drone_data_query": drone_data_query,
+    "set_alarm": set_alarm,
 }
 
 tools = [
@@ -130,6 +169,42 @@ tools = [
                     "query": {
                         "type": "string",
                         "description": "The query conditions for fetching drone data."
+                    }
+                }
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "set_alarm",
+            "description": "Sets an alarm for a specific time with a custom message, date, repeat frequency, and timezone.",
+            "parameters": {
+                "type": "object",
+                "required": ["time", "message"],
+                "properties": {
+                    "time": {
+                        "type": "string",
+                        "description": "The time to set the alarm for, in HH:MM format."
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "The message to display when the alarm goes off."
+                    },
+                    "date": {
+                        "type": "string",
+                        "description": "The date to set the alarm for, in YYYY-MM-DD format. Defaults to today.",
+                        "nullable": True
+                    },
+                    "repeat": {
+                        "type": "string",
+                        "description": "The repeat frequency of the alarm. Options are 'none', 'daily', 'weekly'. Defaults to 'none'.",
+                        "nullable": True
+                    },
+                    "timezone": {
+                        "type": "string",
+                        "description": "The timezone for the alarm. Defaults to the system timezone.",
+                        "nullable": True
                     }
                 }
             }
