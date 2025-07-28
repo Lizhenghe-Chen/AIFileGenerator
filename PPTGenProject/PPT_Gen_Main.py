@@ -22,7 +22,7 @@ def main():
     custom_filename = None  # 例如: "AI教育应用报告_2024"
 
     # 验证设计模板
-    set_design_template(design_number)
+    # set_design_template(design_number)
 
     # 用户输入示例
     user_input = """
