@@ -1,7 +1,7 @@
 import json
 import re
 import random
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 from pptx import Presentation
 import os
 from PPT_Prompt import get_ppt_generation_prompt
@@ -27,7 +27,7 @@ def generate_table_of_contents(slides_data: List[Dict[str, Any]]) -> Dict[str, A
     }
 
 
-def create_table_of_contents_slide(prs: Presentation, toc_data: Dict[str, Any]):
+def create_table_of_contents_slide(prs, toc_data: Dict[str, Any]):
     """创建目录幻灯片"""
     slide_layout = prs.slide_layouts[1]
     slide = prs.slides.add_slide(slide_layout)
@@ -87,7 +87,7 @@ def parse_content(content: str) -> Dict[str, Any]:
         }
 
 
-def create_title_slide(prs: Presentation, slide_data: Dict[str, str]):
+def create_title_slide(prs, slide_data: Dict[str, str]):
     """创建标题幻灯片"""
     slide_layout = prs.slide_layouts[0]
     slide = prs.slides.add_slide(slide_layout)
@@ -99,7 +99,7 @@ def create_title_slide(prs: Presentation, slide_data: Dict[str, str]):
     subtitle.text = slide_data.get("subtitle", "副标题")
 
 
-def get_available_content_layouts(prs: Presentation) -> List[int]:
+def get_available_content_layouts(prs) -> List[int]:
     """自动检测模板中可用的内容布局（必须同时包含标题和内容占位符的布局）"""
     available_layouts = []
 
@@ -149,7 +149,7 @@ def get_available_content_layouts(prs: Presentation) -> List[int]:
 _layout_cache = {}
 
 
-def get_random_content_layout(prs: Presentation) -> int:
+def get_random_content_layout(prs) -> int:
     """随机选择一个内容布局"""
     # 检查是否使用自动检测
     use_auto_detection = PPT_CONFIG.get("auto_detect_layouts", True)
@@ -182,7 +182,7 @@ def get_random_content_layout(prs: Presentation) -> int:
 
 
 def create_content_slide_with_layout(
-    prs: Presentation, slide_data: Dict[str, Any], layout_index: int
+    prs, slide_data: Dict[str, Any], layout_index: int
 ):
     """使用指定布局创建内容幻灯片"""
     content_type = slide_data.get("content_type", "bullet_list")
@@ -256,7 +256,7 @@ def create_content_slide_with_layout(
             p.text = str(content_data)
 
 
-def create_content_slide(prs: Presentation, slide_data: Dict[str, Any]):
+def create_content_slide(prs, slide_data: Dict[str, Any]):
     """创建内容幻灯片（支持随机布局）"""
     # 检查是否启用随机布局
     use_random_layouts = PPT_CONFIG.get("use_random_layouts", True)
@@ -282,15 +282,15 @@ def create_content_slide(prs: Presentation, slide_data: Dict[str, Any]):
         create_content_slide_with_layout(prs, slide_data, 1)
 
 
-def get_template_path(design_number: int) -> str:
+def get_template_path(design_number: Optional[int]) -> str:
     """获取模板文件路径"""
     return PATHS["template_path_format"].format(design_number)
 
 
 def create_presentation(
     ppt_data: Dict[str, Any],
-    design_number: int = None,
-    custom_filename: str = None,
+    design_number: Optional[int] = None,
+    custom_filename: Optional[str] = None,
 ) -> str:
     """创建完整的演示文稿"""
     if design_number is None:
@@ -359,7 +359,7 @@ def create_presentation(
     return full_path
 
 
-def get_openai_client(base_url: str = None, api_key: str = None) -> OpenAI:
+def get_openai_client(base_url: Optional[str] = None, api_key: Optional[str] = None) -> OpenAI:
     """创建OpenAI客户端"""
     if base_url is None:
         base_url = OPENAI_CONFIG["base_url"]
@@ -370,10 +370,10 @@ def get_openai_client(base_url: str = None, api_key: str = None) -> OpenAI:
 
 def generate_ppt_content(
     user_input: str,
-    expected_slides: int = None,
-    base_url: str = None,
-    api_key: str = None,
-    model_path: str = None,
+    expected_slides: Optional[int] = None,
+    base_url: Optional[str] = None,
+    api_key: Optional[str] = None,
+    model_path: Optional[str] = None,
 ) -> str:
     """使用GPT根据用户输入生成PPT内容"""
     if expected_slides is None:
@@ -401,12 +401,12 @@ def generate_ppt_content(
 
 def generate_ppt_from_user_input(
     user_input: str,
-    expected_slides: int = None,
-    custom_filename: str = None,
-    design_number: int = None,
-    base_url: str = None,
-    api_key: str = None,
-    model_path: str = None,
+    expected_slides: Optional[int] = None,
+    custom_filename: Optional[str] = None,
+    design_number: Optional[int] = None,
+    base_url: Optional[str] = None,
+    api_key: Optional[str] = None,
+    model_path: Optional[str] = None,
 ) -> str:
     """根据用户输入生成PPT的完整流程"""
     # 使用配置文件的默认值

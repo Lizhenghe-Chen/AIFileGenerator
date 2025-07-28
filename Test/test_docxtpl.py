@@ -22,32 +22,60 @@ context = {
     ],
     "answer": "綜合以上各點，國家《憲法》就是香港特別行政區《基本法》的憲制基礎……",
     # 选择题示例：用列表+循环
-      "questions": [
+    "multiple_choice": [
         {
             "q": "「一國兩制」內的「兩制」是指哪兩種制度？",
             "choices": ["社會主義", "資本主義", "封建主義", "民主主義"],
-            "correct": [0, 1]
+            "correct": [0, 1],
         },
         {
             "q": "香港特別行政區直轄於甚麼機構？",
             "choices": ["全國人民代表大會", "中央人民政府", "香港特別行政區立法會"],
-            "correct": [1]
+            "correct": [1],
         },
         {
             "q": "香港特別行政區有哪些事務是由中央人民政府負責管理？",
             "choices": ["外交", "財政", "防務", "司法"],
-            "correct": [0, 2]
-        }
+            "correct": [0, 2],
+        },
+    ],
+    "short_answer_questions": [
+        {
+            "q": "參考各項資料，並就你所知，解釋《憲法》適用於香港特別行政區的原因。",
+            "a": [
+                "一個國家，一個主權，一部《憲法》，是各國的通例。",
+                "從國際公法看，當某個地方屬於一個國家時，該國的憲法必然適用於這個地方。",
+                "國家的《憲法》適用於全國，而香港特別行政區是國家的一部分，所以國家《憲法》就是香港特別行政區的《憲法》。",
+                "從憲法學看，憲法也是現代國家的法律和制度淵源。香港特別行政區的產生，便是源自於國家《憲法》第三十一條。",
+                "因此，《基本法》的全名為《中華人民共和國香港特別行政區基本法》。",
+                "綜合以上各點，香港回歸後特別行政區的憲制秩序，必然是以國家《憲法》和《基本法》為基礎和根基。"
+            ],
+        },
+        {
+            "q": "參考各項資料，並就你所知，說明《憲法》和《基本法》的關係。",
+            "a": [
+                "《憲法》是國家的根本大法，是國家制度的基礎。",
+                "《基本法》是香港特別行政區的憲制文件，規範了特區的政治、經濟和社會制度。",
+                "《基本法》是根據《憲法》第三十一條制定的，具有憲法效力。",
+                "《基本法》在香港特別行政區內具有最高法律效力，所有法律和行政措施都必須符合《基本法》的規定。",
+                "因此，《憲法》和《基本法》共同構成了香港特別行政區的憲制基礎。"
+            ],
+        },
     ],
     "today": datetime.datetime.now().strftime("%Y-%m-%d"),
 }
 # 将 enumerate 函数传递到模板上下文中
-context['enumerate'] = enumerate
+context["enumerate"] = enumerate
 # 2. 渲染
-tpl = DocxTemplate("WordGenProject\\hkedu_template_docxtpl.docx")
+template_path = os.path.join(
+    os.getcwd(), "WordGenProject", "hkedu_template_docxtpl.docx"
+)
+tpl = DocxTemplate(template_path)
 tpl.render(context)
 
 # 3. 保存
-output_path = os.path.join(os.getcwd(), "WordGenProject\\hkedu_filled.docx")
+output_path = os.path.join(
+    os.getcwd(), "WordGenProject", context["theme"] + "_hkedu_filled.docx"
+)
 tpl.save(output_path)
 print(f"已生成：{output_path}")

@@ -2,7 +2,10 @@
 PPT生成相关的提示词模板
 """
 
-def get_ppt_generation_prompt(user_input: str, expected_slides: int = 8) -> str:
+from typing import Optional
+
+
+def get_ppt_generation_prompt(user_input: str, expected_slides: Optional[int] = 8) -> str:
     """获取PPT内容生成的提示词"""
     return f"""
 用户需求：{user_input}

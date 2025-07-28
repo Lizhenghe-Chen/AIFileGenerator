@@ -46,19 +46,19 @@ def load_env_overrides():
 
     # OpenAI配置的环境变量覆盖
     if os.getenv("OPENAI_BASE_URL"):
-        OPENAI_CONFIG["base_url"] = os.getenv("OPENAI_BASE_URL")
+        OPENAI_CONFIG["base_url"] = os.getenv("OPENAI_BASE_URL", OPENAI_CONFIG["base_url"])
 
     if os.getenv("OPENAI_API_KEY"):
-        OPENAI_CONFIG["api_key"] = os.getenv("OPENAI_API_KEY")
+        OPENAI_CONFIG["api_key"] = os.getenv("OPENAI_API_KEY", OPENAI_CONFIG["api_key"])
 
     if os.getenv("OPENAI_MODEL_PATH"):
-        OPENAI_CONFIG["model_path"] = os.getenv("OPENAI_MODEL_PATH")
+        OPENAI_CONFIG["model_path"] = os.getenv("OPENAI_MODEL_PATH", OPENAI_CONFIG["model_path"])
 
     return env_overrides
 
 
 # 初始化时加载环境变量覆盖
-load_env_overrides()
+# load_env_overrides()
 
 
 def get_template_path(design_number: int) -> str:
