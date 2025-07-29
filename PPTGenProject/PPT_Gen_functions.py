@@ -133,7 +133,9 @@ def get_available_content_layouts(prs) -> List[int]:
                 if LOGGING_CONFIG.get("show_debug_info", False):
                     title_status = "✓" if has_title else "✗"
                     content_status = "✓" if has_content else "✗"
-                    print(f"  ❌ 布局 {i} 不可用 (标题{title_status} 内容{content_status})")
+                    print(
+                        f"  ❌ 布局 {i} 不可用 (标题{title_status} 内容{content_status})"
+                    )
         except Exception as e:
             if LOGGING_CONFIG.get("show_debug_info", False):
                 print(f"  ⚠️ 检查布局 {i} 时出错: {e}")
@@ -359,7 +361,9 @@ def create_presentation(
     return full_path
 
 
-def get_openai_client(base_url: Optional[str] = None, api_key: Optional[str] = None) -> OpenAI:
+def get_openai_client(
+    base_url: Optional[str] = None, api_key: Optional[str] = None
+) -> OpenAI:
     """创建OpenAI客户端"""
     if base_url is None:
         base_url = OPENAI_CONFIG["base_url"]
@@ -388,7 +392,9 @@ def generate_ppt_content(
     client = get_openai_client(base_url, api_key)
     prompt = get_ppt_generation_prompt(user_input, expected_slides)
 
-    messages = [{"role": "user", "content": prompt}]
+    from openai.types.chat import ChatCompletionUserMessageParam
+
+    messages = [ChatCompletionUserMessageParam(role="user", content=prompt)]
 
     response = client.chat.completions.create(
         model=model_path,
@@ -396,7 +402,7 @@ def generate_ppt_content(
         stream=False,
     )
 
-    return response.choices[0].message.content
+    return response.choices[0].message.content or ""
 
 
 def generate_ppt_from_user_input(

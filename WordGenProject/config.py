@@ -16,7 +16,7 @@ WORD_CONFIG = {
     "default_template": "hkedu_template_docxtpl.docx",  # 默认模板文件名
     "template_folder": "WordGenProject",  # 模板文件夹
     "output_folder": "Output",    # 输出文件夹
-    "show_ai_response": True,             # 是否显示AI响应内容
+    "show_ai_response": False,             # 是否显示AI响应内容
     "show_debug_info": True,              # 是否显示调试信息
 }
 

@@ -1,51 +1,59 @@
 """
 Word文档生成相关的提示词模板
 """
+from typing import Optional
 
 
-def get_word_generation_prompt(user_input: str) -> str:
+def get_agent_system_prompt() -> str:
+    """获取AI代理的系统提示词"""
+    return """你是一个专业的教育内容生成助手，擅长根据提供的知识内容创建高质量的教学材料。"""
+
+def get_word_generation_prompt(learning_content: str, user_requirements: Optional[str] = None) -> str:
     """获取Word内容生成的提示词"""
     return f"""
-用户需求：{user_input}
+需要学生掌握的内容知识点：{learning_content}
 
-请根据用户的需求分析并生成一份教学工作表的内容。工作表应该包含学习重点、教学建议、测验题目等教育内容。
+请根据用户的需求分析并生成一份教学工作表的内容。
+请确保内容专业、准确，并符合教育领域的标准。
 
-请按照以下JSON格式返回：
+请按照以下JSON格式返回，对应的内容为参考，请你根据用户的需求生成相应的内容：
 {{
     "theme": "文档主题标题",
     "topic": "具体主题内容",
     "learning_focus": "学习重点内容",
     "learning_outcome": "学习成果描述",
-    "teaching_suggestions": [
+    "teaching_suggestions": [ # 教学建议列表，可以包含多个建议，尽量具体，不要过于笼统和简洁
         "教学建议1",
         "教学建议2", 
-        "教学建议3"
+        "教学建议3",
+        ... # 可以根据需要添加更多建议
     ],
     "worksheet_title": "工作表标题",
-    "quiz_data": [
+    "quiz_data": [ # 这些内容必须是需要学习掌握的知识点内容，直接照搬，必要时提供公式和示例
         "学习内容片段1",
         "学习内容片段2",
-        "学习内容片段3"
+        "学习内容片段3",
+        ... # 可以根据需要添加更多内容
     ],
     "answer": "综合答案或总结性内容",
-    "multiple_choice": [
+    "multiple_choice": [ #注意根据用户需求生成单选或多选题，题目数量可以调整
         {{
-            "q": "多选题题目1",
-            "choices": ["选项A", "选项B", "选项C", "选项D"],
-            "correct": [0, 2]
+            "q": "选择题题目1",
+            "choices": ["选项A", "选项B", "选项C", "选项D", ...],
+            "correct": [0, 1, 2, ...] 
         }},
         {{
-            "q": "多选题题目2", 
-            "choices": ["选项A", "选项B", "选项C"],
-            "correct": [1]
+            "q": "选择题题目2",
+            "choices": ["选项A", "选项B", "选项C", "选项D", ...],
+            "correct": [1, 2, 3, ...]
         }},
         {{
-            "q": "多选题题目3",
-            "choices": ["选项A", "选项B", "选项C", "选项D"],
-            "correct": [0, 1, 3]
+            "q": "选择题题目3",
+            "choices": ["选项A", "选项B", "选项C", "选项D", ...],
+            "correct": [0, 1, 3, ...]
         }}
     ],
-    "short_answer_questions": [
+    "short_answer_questions": [ # 简答题可以调整数量和内容
         {{
             "q": "简答题题目1",
             "a": [
@@ -68,14 +76,16 @@ def get_word_generation_prompt(user_input: str) -> str:
 }}
 
 要求：
-1. 内容要准确、专业、适合教学使用
-2. 多选题要有合理的选项和正确答案
+1. 内容要准确、专业、适合教学使用，严格按照内容知识点内容生成
+2. 选择题要有合理的选项和正确答案，并必要时根据用户需求提供多选或单选
 3. 简答题的答案要点要清晰明确
 4. 学习重点要突出关键概念
 5. 教学建议要实用可行
 6. 所有内容要与用户需求主题相关
 7. 确保JSON格式完整正确，不要有语法错误
 8. 文本内容要使用中文
+
+请你注意用户的额外需求：{user_requirements}
 
 请直接返回JSON格式的内容，不要添加其他说明文字。
 """

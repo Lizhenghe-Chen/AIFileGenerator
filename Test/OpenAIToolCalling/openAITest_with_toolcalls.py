@@ -6,8 +6,8 @@ from tools import tools, tool_map  # Import tools and tool_map from the new scri
 
 client = OpenAI(
     api_key="sk-DxZqzv54xwqXgzZxuSP8Trp6L8Jkqa1anWPUKP5DWBNiEruW",  # 在这里将 MOONSHOT_API_KEY 替换为你从 Kimi 开放平台申请的 API Key
-    # base_url="http://10.120.47.138:11434/v1",
-    base_url="http://localhost:11434/v1",
+    base_url="http://10.120.47.138:11434/v1",
+    # base_url="http://localhost:11434/v1",
 )
 from openai.types.chat import (
     ChatCompletionSystemMessageParam,
@@ -32,8 +32,7 @@ finish_reason = None
 #   2. 如果 Kimi 大模型认为当前的工具调用
 while finish_reason is None or finish_reason == "tool_calls":
     completion = client.chat.completions.create(
-        # model="./qwen2.5-32b",
-        model="qwen2.5:latest",
+        model="./qwen2.5-32b",
         messages=messages,
         temperature=0.3,
         tools=tools,  # Use the imported tools # type: ignore

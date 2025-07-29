@@ -16,8 +16,10 @@ client = OpenAI(
 # 配置变量
 mode = StreamMode.CHUNK  # 可选: StreamMode.CHAR, StreamMode.CHUNK, StreamMode.ALL
 model_path = "./qwen2.5-32b"
+from openai.types.chat import ChatCompletionUserMessageParam
+
 messages = [
-    {"role": "user", "content": "给我一个1000字的故事"},
+    ChatCompletionUserMessageParam(role="user", content="给我一个1000字的故事"),
 ]
 
 
