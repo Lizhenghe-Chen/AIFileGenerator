@@ -33,8 +33,8 @@ PATHS = {
 
 # 日志配置
 LOGGING_CONFIG = {
-    "show_debug_info": True,
-    "show_gpt_content": True,
+    "show_debug_info": False,
+    "show_gpt_content": False,
     "show_progress": True,
 }
 

@@ -4,9 +4,9 @@ import random
 from typing import Dict, List, Any, Optional
 from pptx import Presentation
 import os
-from PPT_Prompt import get_ppt_generation_prompt
+from PPTGenProject.PPT_Prompt import get_ppt_generation_prompt
 from openai import OpenAI
-from config import OPENAI_CONFIG, PPT_CONFIG, PATHS, LOGGING_CONFIG
+from PPTGenProject.config import OPENAI_CONFIG, PPT_CONFIG, PATHS, LOGGING_CONFIG
 
 
 def generate_table_of_contents(slides_data: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -324,8 +324,8 @@ def create_presentation(
         os.makedirs(output_dir)
         print(f"📁 创建输出目录: {output_dir}")
 
-    # 生成完整的文件路径
-    full_path = os.path.join(output_dir, filename)
+    # 生成完整的文件路径（绝对路径）
+    full_path = os.path.abspath(os.path.join(output_dir, filename))
 
     print(f"\n📊 开始创建演示文稿: {presentation_title}")
     print(f"📁 文件路径: {full_path}")
@@ -344,14 +344,16 @@ def create_presentation(
         slide_title = slide_data.get("title", f"幻灯片 {i + 1}")
 
         slide_counter += 1
-        print(f"  📄 创建第 {slide_counter} 页: {slide_title} ({slide_type})")
+        if LOGGING_CONFIG.get("show_debug_info", False):
+            print(f"  📄 创建第 {slide_counter} 页: {slide_title} ({slide_type})")
 
         if slide_type == "title":
             create_title_slide(prs, slide_data)
             # 在标题页后插入目录页
             if len(toc_data["content"]) > 0:
                 slide_counter += 1
-                print(f"  📋 创建第 {slide_counter} 页: 目录 (table_of_contents)")
+                if LOGGING_CONFIG.get("show_debug_info", False):
+                    print(f"  📋 创建第 {slide_counter} 页: 目录 (table_of_contents)")
                 create_table_of_contents_slide(prs, toc_data)
         else:
             create_content_slide(prs, slide_data)
@@ -414,7 +416,10 @@ def generate_ppt_from_user_input(
     api_key: Optional[str] = None,
     model_path: Optional[str] = None,
 ) -> str:
-    """根据用户输入生成PPT的完整流程"""
+    """根据用户输入生成PPT的完整流程
+    Returns:
+        str: 生成的PPT文件的绝对路径, eg:"E:\\UnityProjects\\AI-PPT-Generator\\Output\\test.pptx"
+    """
     # 使用配置文件的默认值
     if expected_slides is None:
         expected_slides = PPT_CONFIG["default_expected_slides"]
