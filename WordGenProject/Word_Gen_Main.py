@@ -3,7 +3,7 @@ Word文档生成器主函数
 基于OpenAI API和docxtpl模板生成Word文档
 """
 
-from Word_Gen_functions import generate_wordDoc
+from Word_Gen_functions import generate_wordDoc_from_user_input
 from config import WORD_CONFIG
 from typing import Optional
 
@@ -27,7 +27,7 @@ def generate_word_document(
         Exception: 当生成过程中出现错误时抛出异常
     """
     try:
-        filename = generate_wordDoc(
+        filename = generate_wordDoc_from_user_input(
             learning_content, user_requirements, custom_filename
         )
         print(f"\n🎉 成功生成Word文档: {filename}")

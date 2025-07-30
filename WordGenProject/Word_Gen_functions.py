@@ -9,8 +9,11 @@ import datetime
 from typing import Dict, Any, Optional
 from docxtpl import DocxTemplate
 from openai import OpenAI
-from Word_Prompt import get_word_generation_prompt, get_agent_system_prompt
-from config import OPENAI_CONFIG, WORD_CONFIG, PATHS
+from WordGenProject.Word_Prompt import (
+    get_word_generation_prompt,
+    get_agent_system_prompt,
+)
+from WordGenProject.config import OPENAI_CONFIG, WORD_CONFIG, PATHS
 
 
 def call_openai_api(prompt: str, system_prompt: str) -> str:
@@ -109,7 +112,9 @@ def prepare_template_context(parsed_data: Dict[str, Any]) -> Dict[str, Any]:
     return context
 
 
-def generate_document_content(learning_content: str, user_requirements: Optional[str] = None) -> Dict[str, Any]:
+def generate_document_content(
+    learning_content: str, user_requirements: Optional[str] = None
+) -> Dict[str, Any]:
     """
     根据用户输入生成文档内容
 
@@ -119,11 +124,12 @@ def generate_document_content(learning_content: str, user_requirements: Optional
     Returns:
         Dict[str, Any]: 生成的文档内容数据
     """
-    print("🤖 正在调用AI生成内容...")
+    print("🤖 正在调用AI生成word...")
 
     # 调用AI生成内容
     ai_response = call_openai_api(
-        get_word_generation_prompt(learning_content, user_requirements), get_agent_system_prompt()
+        get_word_generation_prompt(learning_content, user_requirements),
+        get_agent_system_prompt(),
     )
 
     if WORD_CONFIG.get("show_ai_response", False):
@@ -170,27 +176,32 @@ def create_word_document(context_data: Dict[str, Any], output_filename: str) -> 
         )
 
         doc.save(output_path)
-        print(f"✅ 文档已保存: {output_path}")
+        # 返回绝对路径
+        abs_output_path = os.path.abspath(output_path)
+        print(f"✅ 文档已保存: {abs_output_path}")
 
-        return output_path
+        return abs_output_path
 
     except Exception as e:
         print(f"❌ 创建Word文档失败: {e}")
         raise e
 
 
-def generate_wordDoc(
-    learning_content: str, user_requirements: Optional[str] = None,custom_filename: Optional[str] = None
+def generate_wordDoc_from_user_input(
+    learning_content: str,
+    user_requirements: Optional[str] = None,
+    custom_filename: Optional[str] = None,
 ) -> str:
     """
     根据用户输入生成Word文档的主函数
 
     Args:
         learning_content (str): 用户输入内容
+        user_requirements (Optional[str]): 用户要求
         custom_filename (Optional[str]): 自定义文件名
 
     Returns:
-        str: 生成的文档路径
+        str: 生成的文档绝对路径
     """
     try:
         # 1. 生成文档内容
@@ -205,7 +216,7 @@ def generate_wordDoc(
         else:
             filename = parsed_data.get("filename", context.get("theme", "生成的文档"))
 
-        # 4. 创建Word文档
+        # 4. 创建Word文档并返回绝对路径
         output_path = create_word_document(context, filename)
 
         return output_path
