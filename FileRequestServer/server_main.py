@@ -3,11 +3,40 @@ import sys
 import os
 from fastapi import FastAPI, HTTPException
 from models import GeneratePPTRequest, GenerateWordRequest
-from services import download_file_service, generate_ppt_service, generate_word_service
+from services import (
+    download_file_service,
+    generate_ppt_service,
+    generate_word_service,
+    mock_generate_file_service,
+)
 
 app = FastAPI()
 
 # fastapi dev .\FileRequestServer\server_main.py --host 0.0.0.0 --port 8000
+
+
+@app.post("/generate/mock_test", tags=["Test"])
+async def generate_MockTest(request: GeneratePPTRequest):
+    """
+    模拟生成文件接口，测试使用
+
+    直接生成PPT文件并返回完成结果。
+    FastAPI会自动处理并发请求，但生成过程本身是同步的。
+    """
+    try:
+        # 直接调用模拟PPT生成服务
+        result_path = await mock_generate_file_service(request)
+
+        return {
+            "status": "completed",
+            "message": "Mock File生成成功",
+            "fullPath": result_path,
+            "userId": request.userId,
+            "filename": result_path.split(os.sep)[-1],  # 获取文件名
+        }
+    except Exception as e:
+        print(f"Mock PPT生成失败: {e}", file=sys.stderr)
+        raise HTTPException(status_code=500, detail=f"Mock PPT生成失败: {str(e)}")
 
 
 @app.post("/generate/ppt")
