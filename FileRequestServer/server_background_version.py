@@ -2,16 +2,22 @@ import sys
 import os
 import uuid
 from typing import Dict
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import (
+    FastAPI,
+    HTTPException,
+    BackgroundTasks,
+)  # https://fastapi.tiangolo.com/tutorial/background-tasks/#add-the-background-task
 from fastapi.responses import FileResponse
 from models import GeneratePPTRequest, GenerateWordRequest
 from services import download_file_service, generate_ppt_service, generate_word_service
+
 app = FastAPI()
 
 # 任务状态存储
 task_status: Dict[str, dict] = {}
 
 # fastapi dev .\FileRequestServer\server.py --host 0.0.0.0 --port 8000
+
 
 def generate_ppt_background(task_id: str, request: GeneratePPTRequest):
     """后台任务：生成PPT文件"""
@@ -165,7 +171,7 @@ async def generate_Word(
 async def get_task_status(task_id: str):
     """
     查询任务状态接口
-    
+
     POST请求文件生成后，轮询该任务状态接口，如果任务ID成功完成，使用 :func:`download_file` 下载文件。
 
     根据任务ID查询后台任务的执行状态和结果信息。
