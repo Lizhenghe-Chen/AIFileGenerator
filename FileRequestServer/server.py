@@ -4,15 +4,14 @@ import uuid
 from typing import Dict
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.responses import FileResponse
-
 from models import GeneratePPTRequest, GenerateWordRequest
 from services import download_file_service, generate_ppt_service, generate_word_service
-
 app = FastAPI()
 
 # 任务状态存储
 task_status: Dict[str, dict] = {}
 
+# fastapi dev .\FileRequestServer\server.py --host 0.0.0.0 --port 8000
 
 def generate_ppt_background(task_id: str, request: GeneratePPTRequest):
     """后台任务：生成PPT文件"""
