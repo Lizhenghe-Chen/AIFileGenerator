@@ -13,7 +13,7 @@ from WordGenProject.Word_Prompt import (
     get_word_generation_prompt,
     get_agent_system_prompt,
 )
-from WordGenProject.config import OPENAI_CONFIG, WORD_CONFIG, PATHS
+from WordGenProject.config import LOGGING_CONFIG, OPENAI_CONFIG, WORD_CONFIG, PATHS
 
 
 def call_openai_api(prompt: str, system_prompt: str) -> str:
@@ -76,7 +76,7 @@ def parse_ai_response(ai_content: str) -> Dict[str, Any]:
 
     except json.JSONDecodeError as e:
         print(f"❌ JSON解析失败: {e}")
-        print(f"原始内容: {ai_content[:500]}...")
+        print(f"原始内容: {ai_content}")
         raise e
     except Exception as e:
         print(f"❌ 内容解析失败: {e}")
@@ -132,7 +132,7 @@ def generate_document_content(
         get_agent_system_prompt(),
     )
 
-    if WORD_CONFIG.get("show_ai_response", False):
+    if LOGGING_CONFIG.get("show_ai_response", True):
         print(f"🔍 AI原始响应: {ai_response}")
 
     # 解析AI响应

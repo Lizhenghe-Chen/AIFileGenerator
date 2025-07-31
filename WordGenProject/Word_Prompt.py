@@ -11,9 +11,21 @@ def get_agent_system_prompt() -> str:
 def get_word_generation_prompt(learning_content: str, user_requirements: Optional[str] = None) -> str:
     """获取Word内容生成的提示词"""
     return f"""
-需要学生掌握的内容知识点：{learning_content}
+请根据用户的需求分析并生成一份教学工作表的内容，要求学生掌握的内容知识点：{learning_content}
 
-请根据用户的需求分析并生成一份教学工作表的内容。
+要求：
+1. 内容要准确、专业、适合教学使用，严格按照内容知识点内容生成
+2. 选择题要有合理的选项和正确答案，并必要时根据用户需求提供多选或单选
+3. 简答题的答案要点要清晰明确
+4. 学习重点要突出关键概念
+5. 教学建议要实用可行
+6. 所有内容要与用户需求主题相关
+7. 确保JSON格式完整正确，不要有语法错误
+8. 文本内容要使用繁体中文
+
+请你注意用户的额外需求：{user_requirements}
+
+请直接返回JSON格式的内容，不要添加其他说明文字。
 请确保内容专业、准确，并符合教育领域的标准。
 
 请按照以下JSON格式返回，对应的内容为参考，请你根据用户的需求生成相应的内容：
@@ -36,7 +48,7 @@ def get_word_generation_prompt(learning_content: str, user_requirements: Optiona
         ... # 可以根据需要添加更多内容
     ],
     "answer": "综合答案或总结性内容",
-    "multiple_choice": [ #注意根据用户需求生成单选或多选题，题目数量可以调整
+    "multiple_choice": [ #注意根据用户需求生成单选或多选题，题目数量可以调整，不用带编号或字母
         {{
             "q": "选择题题目1",
             "choices": ["选项A", "选项B", "选项C", "选项D", ...],
@@ -75,17 +87,5 @@ def get_word_generation_prompt(learning_content: str, user_requirements: Optiona
     "filename": "建议的文件名（不包含.docx扩展名）"
 }}
 
-要求：
-1. 内容要准确、专业、适合教学使用，严格按照内容知识点内容生成
-2. 选择题要有合理的选项和正确答案，并必要时根据用户需求提供多选或单选
-3. 简答题的答案要点要清晰明确
-4. 学习重点要突出关键概念
-5. 教学建议要实用可行
-6. 所有内容要与用户需求主题相关
-7. 确保JSON格式完整正确，不要有语法错误
-8. 文本内容要使用中文
 
-请你注意用户的额外需求：{user_requirements}
-
-请直接返回JSON格式的内容，不要添加其他说明文字。
 """
