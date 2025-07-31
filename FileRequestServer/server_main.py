@@ -23,16 +23,19 @@ async def generate_MockTest(request: GeneratePPTRequest):
     直接生成PPT文件并返回完成结果。
     FastAPI会自动处理并发请求，但生成过程本身是同步的。
     """
+    print(f"{generate_MockTest.__name__} called with request: {request}")
     try:
         # 直接调用模拟PPT生成服务
         result_path = await mock_generate_file_service(request)
-
+        print(f"Mock File生成成功，路径: {result_path}")
         return {
             "status": "completed",
             "message": "Mock File生成成功",
-            "fullPath": result_path,
-            "userId": request.userId,
-            "filename": result_path.split(os.sep)[-1],  # 获取文件名
+            "data": {
+                "fullPath": result_path,
+                "userId": request.userId,
+                "filename": result_path.split(os.sep)[-1],  # 获取文件名
+            },
         }
     except Exception as e:
         print(f"Mock PPT生成失败: {e}", file=sys.stderr)
@@ -78,16 +81,19 @@ async def generate_PPT(request: GeneratePPTRequest):
             "filename": "file.pptx"
         }
     """
+    print(f"{generate_PPT.__name__} called with request: {request}")
     try:
         # 直接调用PPT生成服务
         result_path = await asyncio.to_thread(generate_ppt_service, request)
-
+        print(f"{generate_PPT.__name__}生成成功，路径: {result_path}")
         return {
             "status": "completed",
             "message": "PPT生成成功",
-            "fullPath": result_path,
-            "userId": request.userId,
-            "filename": result_path.split(os.sep)[-1],  # 获取文件名
+            "data": {
+                "fullPath": result_path,
+                "userId": request.userId,
+                "filename": result_path.split(os.sep)[-1],  # 获取文件名
+            },
         }
     except Exception as e:
         print(f"PPT生成失败: {e}", file=sys.stderr)
@@ -133,19 +139,22 @@ async def generate_Word(request: GenerateWordRequest):
             "filename": "file.docx"
         }
     """
+    print(f"{generate_Word.__name__} called with request: {request}")
     try:
         # 直接调用Word生成服务
         result_path = await asyncio.to_thread(generate_word_service, request)
-
+        print(f"{generate_Word.__name__}生成成功，路径: {result_path}")
         return {
             "status": "completed",
             "message": "Word生成成功",
-            "fullPath": result_path,
-            "userId": request.userId,
-            "filename": result_path.split(os.sep)[-1],  # 获取文件名
+            "data": {
+                "fullPath": result_path,
+                "userId": request.userId,
+                "filename": result_path.split(os.sep)[-1],  # 获取文件名
+            },
         }
     except Exception as e:
-        print(f"Word生成失败: {e}", file=sys.stderr)
+        print(f"{generate_Word.__name__}生成失败: {e}", file=sys.stderr)
         raise HTTPException(status_code=500, detail=f"Word生成失败: {str(e)}")
 
 

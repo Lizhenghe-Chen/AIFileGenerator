@@ -65,7 +65,8 @@ def parse_content(content: str) -> Dict[str, Any]:
     try:
         # 尝试直接解析JSON
         parsed_data = json.loads(content)
-        print("✅ JSON解析成功!")
+        if LOGGING_CONFIG["show_debug_info"]:
+            print("✅ JSON解析成功!")
         return parsed_data
     except json.JSONDecodeError:
         print("⚠️ 直接JSON解析失败，尝试提取JSON部分...")
@@ -74,7 +75,8 @@ def parse_content(content: str) -> Dict[str, Any]:
         if json_match:
             try:
                 parsed_data = json.loads(json_match.group())
-                print("✅ 提取JSON解析成功!")
+                if LOGGING_CONFIG["show_debug_info"]:
+                    print("✅ 提取JSON解析成功!")
                 return parsed_data
             except json.JSONDecodeError:
                 print("❌ 提取JSON解析也失败")
@@ -163,8 +165,6 @@ def get_random_content_layout(prs) -> int:
         # 检查缓存
         if cache_key in _layout_cache:
             available_layouts = _layout_cache[cache_key]
-            if LOGGING_CONFIG.get("show_debug_info", False):
-                print(f"  📋 使用缓存的布局: {available_layouts}")
         else:
             # 自动检测可用布局并缓存
             available_layouts = get_available_content_layouts(prs)
@@ -303,7 +303,8 @@ def create_presentation(
     # 使用模板文件创建演示文稿
     if os.path.exists(template_path):
         prs = Presentation(template_path)
-        print(f"🎨 使用模板: {template_path}")
+        if LOGGING_CONFIG.get("show_progress", True):
+            print(f"🎨 使用模板: {template_path}")
     else:
         prs = Presentation()
         print(f"⚠️ 模板文件不存在，使用默认模板: {template_path}")
@@ -327,14 +328,16 @@ def create_presentation(
     # 生成完整的文件路径（绝对路径）
     full_path = os.path.abspath(os.path.join(output_dir, filename))
 
-    print(f"\n📊 开始创建演示文稿: {presentation_title}")
-    print(f"📁 文件路径: {full_path}")
+    if LOGGING_CONFIG.get("show_progress", False):
+        print(f"📊 正在创建演示文稿: {presentation_title}")
+        print(f"📁 文件路径: {full_path}")
 
     slides = ppt_data.get("slides", [])
 
     # 生成目录数据
     toc_data = generate_table_of_contents(slides)
-    print(f"📋 已生成目录，包含 {len(toc_data['content'])} 个章节")
+    if LOGGING_CONFIG.get("show_debug_info", False):
+        print(f"📋 已生成目录，包含 {len(toc_data['content'])} 个章节")
 
     # 创建幻灯片
     slide_counter = 0
@@ -421,9 +424,9 @@ def generate_ppt_from_user_input(
         str: 生成的PPT文件的绝对路径, eg:"E:\\UnityProjects\\AI-PPT-Generator\\Output\\test.pptx"
     """
     # 使用配置文件的默认值
-    if expected_slides is None:
+    if expected_slides is None or expected_slides <= 0:
         expected_slides = PPT_CONFIG["default_expected_slides"]
-    if design_number is None:
+    if design_number is None or design_number <= 0:
         design_number = PPT_CONFIG["default_design_number"]
     if base_url is None:
         base_url = OPENAI_CONFIG["base_url"]
@@ -433,23 +436,25 @@ def generate_ppt_from_user_input(
         model_path = OPENAI_CONFIG["model_path"]
 
     if LOGGING_CONFIG["show_progress"]:
-        print(f"🚀 正在根据用户需求生成PPT...")
-        print(f"📝 用户需求: {user_input}")
-        print(f"📊 期望页数: {expected_slides}页")
-        print(f"🎨 使用模板: Design-{design_number}.pptx")
+        print(
+            f"🚀 正在根据用户需求生成PPT... 📝 传入内容: {user_input} | 📊 期望页数: {expected_slides}页 | 🎨 模板: Design-{design_number}.pptx"
+        )
 
     # 生成内容
     content = generate_ppt_content(
         user_input, expected_slides, base_url, api_key, model_path
     )
-    print("✅ GPT内容生成完成！")
+    if LOGGING_CONFIG["show_progress"]:
+        print("✅ GPT内容生成完成！")
 
     # 解析内容
     ppt_data = parse_content(content)
-    print("✅ 内容解析完成！")
+    if LOGGING_CONFIG["show_progress"]:
+        print("✅ 内容解析完成！")
 
     # 创建PPT
     saved_filename = create_presentation(ppt_data, design_number, custom_filename)
-    print(f"✅ PPT文件已创建：{saved_filename}")
+    if LOGGING_CONFIG["show_progress"]:
+        print(f"✅ PPT文件已创建：{saved_filename}")
 
     return saved_filename

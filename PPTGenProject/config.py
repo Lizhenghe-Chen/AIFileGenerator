@@ -13,7 +13,7 @@ OPENAI_CONFIG = {
 
 # PPT生成默认配置
 PPT_CONFIG = {
-    "default_design_number": 3,
+    "default_design_number": 1,
     "default_expected_slides": 4,
     "default_custom_filename": None,
     "available_designs": [1, 2, 3, 4, 5, 6, 7],
@@ -35,7 +35,7 @@ PATHS = {
 LOGGING_CONFIG = {
     "show_debug_info": False,
     "show_gpt_content": False,
-    "show_progress": True,
+    "show_progress": False,
 }
 
 
