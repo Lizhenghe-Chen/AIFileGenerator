@@ -20,8 +20,8 @@ WORD_CONFIG = {
 
 # 文件路径配置
 PATHS = {
-    "template_folder": "WordGenProject",
-    "output_folder": "WordGenProject",
+    "template_folder": os.path.dirname(__file__),  # 当前文件所在目录
+    "output_folder": os.path.join(os.path.dirname(__file__), "..", "Output"),  # 上级目录的Output文件夹
     "default_template": "hkedu_template_docxtpl.docx",
 }
 
@@ -60,7 +60,7 @@ def validate_config():
     """验证配置的有效性"""
     # 检查模板文件是否存在
     template_path = os.path.join(
-        WORD_CONFIG["template_folder"], WORD_CONFIG["default_template"]
+        PATHS["template_folder"], PATHS["default_template"]
     )
 
     if not os.path.exists(template_path):

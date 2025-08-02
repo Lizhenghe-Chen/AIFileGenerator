@@ -4,7 +4,6 @@ Word文档生成器主函数
 """
 
 from Word_Gen_functions import generate_wordDoc_from_user_input
-from config import WORD_CONFIG
 from typing import Optional
 
 

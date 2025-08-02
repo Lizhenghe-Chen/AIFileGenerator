@@ -158,7 +158,7 @@ def create_word_document(context_data: Dict[str, Any], output_filename: str) -> 
 
         # 获取模板路径
         template_path = os.path.join(
-            os.getcwd(), WORD_CONFIG["template_folder"], WORD_CONFIG["default_template"]
+            PATHS["template_folder"], PATHS["default_template"]
         )
 
         if not os.path.exists(template_path):
@@ -172,8 +172,11 @@ def create_word_document(context_data: Dict[str, Any], output_filename: str) -> 
 
         # 保存文档
         output_path = os.path.join(
-            os.getcwd(), WORD_CONFIG["output_folder"], f"{output_filename}.docx"
+            PATHS["output_folder"], f"{output_filename}.docx"
         )
+        
+        # 确保输出目录存在
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
         doc.save(output_path)
         # 返回绝对路径

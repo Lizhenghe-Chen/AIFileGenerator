@@ -22,6 +22,7 @@ def get_word_generation_prompt(learning_content: str, user_requirements: Optiona
 6. 所有内容要与用户需求主题相关
 7. 确保JSON格式完整正确，不要有语法错误
 8. 文本内容要使用繁体中文
+9. 公式使用LaTeX格式，确保数学公式清晰可读，括号使用双斜杠
 
 请你注意用户的额外需求：{user_requirements}
 

@@ -26,9 +26,9 @@ PPT_CONFIG = {
 
 # 文件路径配置
 PATHS = {
-    "designs_folder": "Designs",
-    "output_folder": ".",  # 当前目录
-    "template_path_format": "Designs/Design-{}.pptx",
+    "designs_folder": os.path.join(os.path.dirname(__file__), "..", "Designs"),  # 上级目录的Designs文件夹
+    "output_folder": os.path.join(os.path.dirname(__file__), "..", "Output"),  # 上级目录的Output文件夹
+    "template_path_format": os.path.join(os.path.dirname(__file__), "..", "Designs", "Design-{}.pptx"),
 }
 
 # 日志配置

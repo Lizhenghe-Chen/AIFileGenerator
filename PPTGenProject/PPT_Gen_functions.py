@@ -320,7 +320,7 @@ def create_presentation(
         filename = f"{suggested_filename}.pptx"
 
     # 创建Output文件夹（如果不存在）
-    output_dir = "Output"
+    output_dir = PATHS["output_folder"]
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
         print(f"📁 创建输出目录: {output_dir}")
