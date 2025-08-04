@@ -1,10 +1,10 @@
 from PPT_Gen_functions import generate_ppt_from_user_input, get_template_path
-from config import PPT_CONFIG, validate_design_number
+from AIFileGenerator.config import PPT_CONFIG, validate_ppt_design_number
 
 
 def set_design_template(design_number: int):
     """验证设计模板是否可用"""
-    if validate_design_number(design_number):
+    if validate_ppt_design_number(design_number):
         template_path = get_template_path(design_number)
         print(f"🎨 设计模板已设置为: Design-{design_number}.pptx")
         return template_path

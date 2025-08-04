@@ -13,7 +13,7 @@ from WordGenProject.Word_Prompt import (
     get_word_generation_prompt,
     get_agent_system_prompt,
 )
-from WordGenProject.config import LOGGING_CONFIG, OPENAI_CONFIG, WORD_CONFIG, PATHS
+from AIFileGenerator.config import LOGGING_CONFIG, OPENAI_CONFIG, WORD_CONFIG, PATHS
 
 
 def call_openai_api(prompt: str, system_prompt: str) -> str:
@@ -158,7 +158,7 @@ def create_word_document(context_data: Dict[str, Any], output_filename: str) -> 
 
         # 获取模板路径
         template_path = os.path.join(
-            PATHS["template_folder"], PATHS["default_template"]
+            PATHS["word_template_folder"], WORD_CONFIG["default_template"]
         )
 
         if not os.path.exists(template_path):

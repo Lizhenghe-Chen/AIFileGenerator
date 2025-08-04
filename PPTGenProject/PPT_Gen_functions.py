@@ -6,7 +6,7 @@ from pptx import Presentation
 import os
 from PPTGenProject.PPT_Prompt import get_ppt_generation_prompt
 from openai import OpenAI
-from PPTGenProject.config import OPENAI_CONFIG, PPT_CONFIG, PATHS, LOGGING_CONFIG
+from AIFileGenerator.config import OPENAI_CONFIG, PPT_CONFIG, PATHS, LOGGING_CONFIG
 
 
 def generate_table_of_contents(slides_data: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -286,7 +286,7 @@ def create_content_slide(prs, slide_data: Dict[str, Any]):
 
 def get_template_path(design_number: Optional[int]) -> str:
     """获取模板文件路径"""
-    return PATHS["template_path_format"].format(design_number)
+    return PATHS["ppt_template_path_format"].format(design_number)
 
 
 def create_presentation(
@@ -299,7 +299,7 @@ def create_presentation(
         design_number = PPT_CONFIG["default_design_number"]
 
     template_path = get_template_path(design_number)
-
+    print(f"📁 模板文件路径: {template_path}")
     # 使用模板文件创建演示文稿
     if os.path.exists(template_path):
         prs = Presentation(template_path)
