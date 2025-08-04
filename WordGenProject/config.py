@@ -3,6 +3,7 @@ Word文档生成器配置文件
 """
 
 import os
+from dotenv import load_dotenv
 
 # OpenAI API 配置
 OPENAI_CONFIG = {
@@ -21,7 +22,9 @@ WORD_CONFIG = {
 # 文件路径配置
 PATHS = {
     "template_folder": os.path.dirname(__file__),  # 当前文件所在目录
-    "output_folder": os.path.join(os.path.dirname(__file__), "..", "Output"),  # 上级目录的Output文件夹
+    "output_folder": os.path.join(
+        os.path.dirname(__file__), "..", "Output"
+    ),  # 上级目录的Output文件夹
     "default_template": "hkedu_template_docxtpl.docx",
 }
 
@@ -36,32 +39,32 @@ LOGGING_CONFIG = {
 # 环境变量覆盖（如果存在）
 def load_env_overrides():
     """从环境变量加载配置覆盖"""
-    env_overrides = {}
+    # 加载 .env 文件
+    load_dotenv()
 
     # OpenAI配置的环境变量覆盖
-    if os.getenv("OPENAI_BASE_URL"):
-        OPENAI_CONFIG["base_url"] = os.getenv(
-            "OPENAI_BASE_URL", OPENAI_CONFIG["base_url"]
-        )
+    if os.getenv("BASE_URL"):
+        OPENAI_CONFIG["base_url"] = os.getenv("BASE_URL", OPENAI_CONFIG["base_url"])
 
     if os.getenv("OPENAI_API_KEY"):
         OPENAI_CONFIG["api_key"] = os.getenv("OPENAI_API_KEY", OPENAI_CONFIG["api_key"])
 
-    if os.getenv("OPENAI_MODEL"):
+    if os.getenv("MODEL_NAME"):
         OPENAI_CONFIG["model_path"] = os.getenv(
-            "OPENAI_MODEL", OPENAI_CONFIG["model_path"]
+            "MODEL_NAME", OPENAI_CONFIG["model_path"]
         )
+    print(f"环境变量覆盖已加载: {OPENAI_CONFIG}")
 
-    return env_overrides
+
+# 加载环境变量覆盖 
+load_env_overrides()
 
 
 # 验证配置
 def validate_config():
     """验证配置的有效性"""
     # 检查模板文件是否存在
-    template_path = os.path.join(
-        PATHS["template_folder"], PATHS["default_template"]
-    )
+    template_path = os.path.join(PATHS["template_folder"], PATHS["default_template"])
 
     if not os.path.exists(template_path):
         print(f"⚠️ 警告: 模板文件不存在 {template_path}")

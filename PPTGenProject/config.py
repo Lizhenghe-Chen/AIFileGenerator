@@ -3,8 +3,10 @@ PPT生成器配置文件
 """
 
 import os
+from dotenv import load_dotenv
 
-# OpenAI API 配置
+
+# OpenAI API 配置, 如果沒有.env文件，則使用默認值
 OPENAI_CONFIG = {
     "base_url": "http://10.120.47.138:11434/v1",
     "api_key": "dummy_key",
@@ -21,14 +23,28 @@ PPT_CONFIG = {
     # 随机布局配置
     "use_random_layouts": True,
     "auto_detect_layouts": True,  # 自动检测模板中的可用布局
-    "available_content_layouts": [1, 2, 3, 4, 7, 8, 9],  # 当auto_detect_layouts=False时使用
+    "available_content_layouts": [
+        1,
+        2,
+        3,
+        4,
+        7,
+        8,
+        9,
+    ],  # 当auto_detect_layouts=False时使用
 }
 
 # 文件路径配置
 PATHS = {
-    "designs_folder": os.path.join(os.path.dirname(__file__), "..", "Designs"),  # 上级目录的Designs文件夹
-    "output_folder": os.path.join(os.path.dirname(__file__), "..", "Output"),  # 上级目录的Output文件夹
-    "template_path_format": os.path.join(os.path.dirname(__file__), "..", "Designs", "Design-{}.pptx"),
+    "designs_folder": os.path.join(
+        os.path.dirname(__file__), "..", "Designs"
+    ),  # 上级目录的Designs文件夹
+    "output_folder": os.path.join(
+        os.path.dirname(__file__), "..", "Output"
+    ),  # 上级目录的Output文件夹
+    "template_path_format": os.path.join(
+        os.path.dirname(__file__), "..", "Designs", "Design-{}.pptx"
+    ),
 }
 
 # 日志配置
@@ -42,23 +58,25 @@ LOGGING_CONFIG = {
 # 环境变量覆盖（如果存在）
 def load_env_overrides():
     """从环境变量加载配置覆盖"""
-    env_overrides = {}
+    # 加载 .env 文件
+    load_dotenv()
 
     # OpenAI配置的环境变量覆盖
-    if os.getenv("OPENAI_BASE_URL"):
-        OPENAI_CONFIG["base_url"] = os.getenv("OPENAI_BASE_URL", OPENAI_CONFIG["base_url"])
+    if os.getenv("BASE_URL"):
+        OPENAI_CONFIG["base_url"] = os.getenv("BASE_URL", OPENAI_CONFIG["base_url"])
 
     if os.getenv("OPENAI_API_KEY"):
         OPENAI_CONFIG["api_key"] = os.getenv("OPENAI_API_KEY", OPENAI_CONFIG["api_key"])
 
-    if os.getenv("OPENAI_MODEL_PATH"):
-        OPENAI_CONFIG["model_path"] = os.getenv("OPENAI_MODEL_PATH", OPENAI_CONFIG["model_path"])
-
-    return env_overrides
+    if os.getenv("MODEL_NAME"):
+        OPENAI_CONFIG["model_path"] = os.getenv(
+            "MODEL_NAME", OPENAI_CONFIG["model_path"]
+        )
+    print(f"环境变量覆盖已加载: {OPENAI_CONFIG}")
 
 
 # 初始化时加载环境变量覆盖
-# load_env_overrides()
+load_env_overrides()
 
 
 def get_template_path(design_number: int) -> str:

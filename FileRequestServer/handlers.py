@@ -39,7 +39,7 @@ async def handle_mock_test(request: GeneratePPTRequest):
         result_path = await mock_generate_file_service(request)
         print(f"Mock File生成成功，路径: {result_path}")
         return {
-            "status": "completed",
+            "success": "True",
             "message": "Mock File生成成功",
             "data": {
                 "fullPath": result_path,
@@ -64,7 +64,7 @@ async def handle_ppt_generation(request: GeneratePPTRequest):
 
     Returns:
         dict: PPT生成完成结果
-            - status (str): 固定为"completed"
+            - success (bool): 固定为True
             - message (str): 生成成功消息
             - fullPath (str): 生成文件的完整路径
             - userId (str): 用户ID
@@ -83,7 +83,7 @@ async def handle_ppt_generation(request: GeneratePPTRequest):
 
         Response:
         {
-            "status": "completed",
+            "success": "True",
             "message": "PPT生成成功",
             "fullPath": "/path/to/file.pptx",
             "userId": "user123",
@@ -95,7 +95,7 @@ async def handle_ppt_generation(request: GeneratePPTRequest):
         result_path = await asyncio.to_thread(generate_ppt_service, request)
         print(f"PPT生成成功，路径: {result_path}")
         return {
-            "status": "completed",
+            "success": True,
             "message": "PPT生成成功",
             "data": {
                 "fullPath": result_path,
@@ -120,7 +120,7 @@ async def handle_word_generation(request: GenerateWordRequest):
 
     Returns:
         dict: Word文档生成完成结果
-            - status (str): 固定为"completed"
+            - success (bool): 固定为True
             - message (str): 生成成功消息
             - fullPath (str): 生成文件的完整路径
             - userId (str): 用户ID
@@ -139,7 +139,7 @@ async def handle_word_generation(request: GenerateWordRequest):
 
         Response:
         {
-            "status": "completed",
+            "success": true,
             "message": "Word生成成功",
             "fullPath": "/path/to/file.docx",
             "userId": "user123",
@@ -151,7 +151,7 @@ async def handle_word_generation(request: GenerateWordRequest):
         result_path = await asyncio.to_thread(generate_word_service, request)
         print(f"Word生成成功，路径: {result_path}")
         return {
-            "status": "completed",
+            "success": True,
             "message": "Word生成成功",
             "data": {
                 "fullPath": result_path,
