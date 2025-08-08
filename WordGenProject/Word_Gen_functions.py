@@ -13,7 +13,7 @@ from WordGenProject.Word_Prompt import (
     get_word_generation_prompt,
     get_agent_system_prompt,
 )
-from AIFileGenerator.config import LOGGING_CONFIG, OPENAI_CONFIG, WORD_CONFIG, PATHS
+from FileRequestServer.config import LOGGING_CONFIG, OPENAI_CONFIG, WORD_CONFIG, PATHS
 
 
 def call_openai_api(prompt: str, system_prompt: str) -> str:

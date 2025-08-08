@@ -29,7 +29,7 @@ def get_word_generation_prompt(learning_content: str, user_requirements: Optiona
 请直接返回JSON格式的内容，不要添加其他说明文字。
 请确保内容专业、准确，并符合教育领域的标准。
 
-请按照以下JSON格式返回，对应的内容为参考，请你根据用户的需求生成相应的内容：
+请按照以下JSON格式返回，不要有中文标点符号在json格式中。对应的内容为参考，请你根据用户的需求生成相应的内容：
 {{
     "theme": "文档主题标题",
     "topic": "具体主题内容",

@@ -6,7 +6,7 @@ from pptx import Presentation
 import os
 from PPTGenProject.PPT_Prompt import get_ppt_generation_prompt
 from openai import OpenAI
-from AIFileGenerator.config import OPENAI_CONFIG, PPT_CONFIG, PATHS, LOGGING_CONFIG
+from FileRequestServer.config import OPENAI_CONFIG, PPT_CONFIG, PATHS, LOGGING_CONFIG
 
 
 def generate_table_of_contents(slides_data: List[Dict[str, Any]]) -> Dict[str, Any]:

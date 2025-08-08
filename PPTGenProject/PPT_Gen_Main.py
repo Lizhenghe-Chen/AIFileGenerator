@@ -1,5 +1,5 @@
 from PPT_Gen_functions import generate_ppt_from_user_input, get_template_path
-from AIFileGenerator.config import PPT_CONFIG, validate_ppt_design_number
+from AIFileGenerator.FileRequestServer.config import PPT_CONFIG, validate_ppt_design_number
 
 
 def set_design_template(design_number: int):
