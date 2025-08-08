@@ -1,6 +1,9 @@
 from fastapi import FastAPI
-from AIFileGenerator.FileRequestServer.models import GeneratePPTRequest, GenerateWordRequest
-from AIFileGenerator.FileRequestServer.handlers import (
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from FileRequestServer.models import GeneratePPTRequest, GenerateWordRequest
+from FileRequestServer.handlers import (
     handle_mock_test,
     handle_ppt_generation,
     handle_word_generation,
