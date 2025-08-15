@@ -14,7 +14,7 @@ def get_word_generation_prompt(learning_content: str, user_requirements: Optiona
 请根据用户的需求分析并生成一份教学工作表的内容，要求学生掌握的内容知识点：{learning_content}
 
 要求：
-1. 内容要准确、专业、适合教学使用，严格按照内容知识点内容生成
+1. 内容要准确、专业、适合教学使用,不要口語化，严格按照内容知识点内容生成
 2. 选择题要有合理的选项和正确答案，并必要时根据用户需求提供多选或单选
 3. 简答题的答案要点要清晰明确
 4. 学习重点要突出关键概念
@@ -23,6 +23,7 @@ def get_word_generation_prompt(learning_content: str, user_requirements: Optiona
 7. 确保JSON格式完整正确，不要有语法错误
 8. 文本内容要使用繁体中文
 9. 公式使用LaTeX格式，确保数学公式清晰可读，括号使用双斜杠
+10. 粵語請使用正式的,非口語化的表達方式
 
 请你注意用户的额外需求：{user_requirements}
 
