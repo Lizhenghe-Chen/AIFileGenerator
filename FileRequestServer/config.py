@@ -35,7 +35,7 @@ PPT_CONFIG = {
 # 文件路径配置 (合并)
 PATHS = {
     # Word模板文件夹
-    "word_template_folder": os.path.join(os.path.dirname(__file__), "WordGenProject"),
+    "word_template_folder": os.path.join(os.path.dirname(__file__), "..", "WordGenProject"),
     # 输出文件夹
     "output_folder": os.path.join(os.path.dirname(__file__), "..", "Output"),
     # Word默认模板
