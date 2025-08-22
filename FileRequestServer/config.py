@@ -41,7 +41,7 @@ PATHS = {
     # Word默认模板
     "word_default_template": "hkedu_template_docxtpl.docx",
     # PPT模板格式化路径
-    "ppt_template_path_format": os.path.join(os.path.dirname(__file__), "Designs", "Design-{}.pptx"),
+    "ppt_template_path_format": os.path.join(os.path.dirname(__file__),"..",  "Designs", "Design-{}.pptx"),
 }
 
 # 日志配置 (合并，保留常用项)
