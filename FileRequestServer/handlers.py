@@ -8,8 +8,8 @@ import os
 from functools import wraps
 from fastapi import HTTPException
 
-from FileRequestServer.models import GeneratePPTRequest, GenerateWordRequest
-from FileRequestServer.services import (
+from AIFileGenerator.FileRequestServer.models import GeneratePPTRequest, GenerateWordRequest
+from AIFileGenerator.FileRequestServer.services import (
     download_file_service,
     generate_ppt_service,
     generate_word_service,
