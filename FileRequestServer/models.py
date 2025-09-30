@@ -6,7 +6,7 @@ class GeneratePPTRequest(BaseModel):
     userId: str = "666"
     content: str = "如何追到喜欢的女生"
     expected_slides: Optional[int] = 4
-    design_number: Optional[int] = 1
+    design_number: Optional[int] = 5
     custom_filename: Optional[str] = "test"
 
 

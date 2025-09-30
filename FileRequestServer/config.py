@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 
 # OpenAI API 配置 (统一)
 OPENAI_CONFIG = {
-    "base_url": "http://10.120.47.138:11434/v1",
-    "api_key": "dummy_key",
-    "model_path": "./qwen2.5-32b",
+    "base_url": "https://api.moonshot.cn/v1",
+    "api_key": "sk-ocNPFLW0WIyiyP19nQ0GkAn0ABtBfLoX8PQmaoGdltPeNoJY",
+    "model_path": "moonshot-v1-8k",
 }
 
 # Word文档生成默认配置
