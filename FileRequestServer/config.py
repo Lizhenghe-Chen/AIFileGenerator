@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 OPENAI_CONFIG = {
     "base_url": "https://api.moonshot.cn/v1",
     "api_key": "sk-ocNPFLW0WIyiyP19nQ0GkAn0ABtBfLoX8PQmaoGdltPeNoJY",
-    "model_path": "moonshot-v1-8k",
+    "model_path": "moonshot-v1-32k",
 }
 
 # Word文档生成默认配置

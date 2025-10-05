@@ -103,7 +103,7 @@ float PID_AntiWindup(float r, float y, float u_max)
 （完）
     """
     user_requirements = (
-        "选择题必须全部为单选题！并给出至少5道题目。简答题至少4道。需要有公式考核。"
+        "選擇題必須全部為單選題！並給出至少5道題目。簡答題至少4道。需要有公式考核。"
     )
     custom_filename = "Test"  # 可选的自定义文件名
     # 生成Word文档

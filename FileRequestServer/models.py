@@ -13,11 +13,11 @@ class GeneratePPTRequest(BaseModel):
 class GenerateWordRequest(BaseModel):
     userId: str = "666"
     user_requirements: Optional[str] = (
-        "选择题必须全部为单选题！并给出至少5道题目。简答题至少4道。需要有公式考核。"
+        "選擇題必須全部為單選題！並給出至少5道題目。簡答題至少4道。需要有公式考核。"
     )
     learning_content: str = """
-专业教学资料  
-主题：PID 控制的“抗饱和（Anti-Windup）机制”——原理、数学建模与工程实现
+專業教學資料  
+主題：PID 控制的“抗飽和（Anti-Windup）機制”——原理、數學建模與工程實現
 
 1. 问题背景  
 在连续运行过程中，如果执行器达到其物理极限（如阀门全开、电机电压饱和），误差 e(t)=r(t)−y(t) 仍持续存在，积分器会不断累积误差 → 积分项 I(t) 迅速增大 → 系统出现严重的超调与振荡，该现象称为积分饱和（Integral Wind-up）。

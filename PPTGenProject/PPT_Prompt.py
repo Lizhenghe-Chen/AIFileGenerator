@@ -1,81 +1,74 @@
 """
-PPT生成相关的提示词模板
+PPT生成相關嘅提示詞模板
 """
 
 from typing import Optional
 
 
 def get_ppt_generation_prompt(user_input: str, expected_slides: Optional[int] = 8) -> str:
-    """获取PPT内容生成的提示词"""
+    """獲取PPT內容生成嘅提示詞"""
     return f"""
-用户传入的ppt内容：{user_input}
-期望的幻灯片数量：{expected_slides}页
+用戶傳入嘅ppt內容：{user_input}
+期望嘅幻燈片數量：{expected_slides}頁
 
-请根据用户的需求分析主题、内容，然后生成一个幻灯片的演示文稿。
+請根據用戶嘅需求分析主題、內容，然後生成一個幻燈片嘅演示文稿。
+嚴格根據知識點嘅語言，使用**繁體中文**或**英語**，不要使用**簡體中文**。
 
-请按照以下JSON格式返回：
+請按照以下JSON格式返回：
 {{
-    "title": "演示文稿标题",
-    "filename": "建议的文件名（不包含.pptx扩展名）",
+    "title": "演示文稿標題",
+    "filename": "建議嘅文件名（唔包含.pptx擴展名）",
     "slides": [
         {{
             "type": "title",
-            "title": "主标题",
-            "subtitle": "副标题"
+            "title": "主標題",
+            "subtitle": "副標題"
         }},
         {{
             "type": "content",
-            "title": "第一部分标题",
+            "title": "第一部分標題",
             "content_type": "bullet_list",
-            "content": ["要点1", "要点2", "要点3"],
+            "content": ["要點1", "要點2", "要點3"],
             "has_image": true
         }},
         {{
             "type": "content",
-            "title": "第二部分标题",
+            "title": "第二部分標題",
             "content_type": "paragraph",
-            "content": "这是一段完整的文字描述，可以详细阐述某个概念或观点。"
+            "content": "呢係一段完整嘅文字描述，可以詳細闡述某個概念或者觀點。"
         }},
         {{
             "type": "content",
-            "title": "第N部分标题",
+            "title": "第N部分標題",
             "content_type": "title_paragraph",
             "content": {{
-                "subtitle": "小标题",
-                "text": "这是小标题下的详细说明文字。"
+                "subtitle": "小標題",
+                "text": "呢係小標題下嘅詳細說明文字。"
             }}
         }},
         {{
             "type": "content",
-            "title": "总结部分标题",
+            "title": "總結部分標題",
             "content_type": "paragraph",
-            "content": "这是一段完整的文字描述，阐述整个ppt的内容。文字应该简洁明了，同时包含足够的信息。"
+            "content": "呢係一段完整嘅文字描述，闡述成個ppt嘅內容。文字應該簡潔明瞭，同時包含足夠嘅信息。"
         }},
     ]
 }}
 
-内容类型说明：
-- "bullet_list": 项目符号列表
+內容類型說明：
+- "bullet_list": 項目符號列表
 - "paragraph": 完整段落文字
-- "title_paragraph": 小标题加段落组合
+- "title_paragraph": 小標題加段落組合
 
 要求：
-1. 严格按照期望的{expected_slides}页数量生成内容（包括标题页和目录页）!!!
-2. 确保每个content slide都有明确的标题，用于自动生成目录
-3. 根据内容性质选择合适的content_type
-4. 为演示文稿和文件名选择恰当的标题
-5. 内容要充实且符合用户需求
-6. 语言一致性（强制规则）  
-   - 首先判断「learning_content」所用语言：  
-     ‑ 若主要用英文撰写→全文（含 JSON 键名以外的所有文本）必须严格使用英文；  
-     ‑ 若主要用简体中文撰写→全文必须严格使用简体中文；  
-     ‑ 若主要用繁体中文撰写→全文必须严格使用繁体中文（正體字，含港澳臺慣用詞彙與標點『』「」）；  
-     ‑ 若主要用粤语（繁体）撰写→全文使用正式、非口语化粤语，但仍以繁体字书写。  
-   - 禁止出现任何多语言混用（包括但不限於選項、答案、教學建議、檔名）。  
-   - 所有數字、單位、標點亦須符合該語言習慣。  
-   - 若違反，視為格式錯誤。
-7. 确保JSON格式完整正确，不要有语法错误；特别注意转义字符，如反斜杠在LaTeX公式中必须使用双反斜杠（\\\\）表示；如果内容涉及公式，使用LaTeX格式
-8. 验证生成的JSON是否可解析，避免Invalid \\escape错误
+1. 嚴格按照期望嘅{expected_slides}頁數量生成內容（包括標題頁同目錄頁）!!!
+2. 確保每個content slide都有明確嘅標題，用於自動生成目錄
+3. 根據內容性質揀合適嘅content_type
+4. 為演示文稿同文件名揀恰當嘅標題
+5. 內容要充實且符合用戶需求
+6. 語言一致性（強制規則）  
+7. 確保JSON格式完整正確，唔好有語法錯誤；特別注意轉義字符，例如反斜槓喺LaTeX公式中必須使用雙反斜槓（\\\\）表示；如果內容涉及公式，使用LaTeX格式
+8. 驗證生成嘅JSON是否可解析，避免Invalid \\escape錯誤
 
-确保返回有效的JSON格式，不要添加任何其他文字说明。
+確保返回有效嘅JSON格式，唔好添加任何其他文字說明。
 """
