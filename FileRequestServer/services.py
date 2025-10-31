@@ -7,9 +7,9 @@ from fastapi import HTTPException
 from fastapi.responses import FileResponse
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from FileRequestServer.models import GeneratePPTRequest
-from PPTGenProject.PPT_Gen_functions import generate_ppt_from_user_input
-from WordGenProject.Word_Gen_functions import generate_wordDoc_from_user_input
+from AIFileGenerator.FileRequestServer.models import GeneratePPTRequest
+from AIFileGenerator.PPTGenProject.PPT_Gen_functions import generate_ppt_from_user_input
+from AIFileGenerator.WordGenProject.Word_Gen_functions import generate_wordDoc_from_user_input
 
 
 async def mock_generate_file_service(request: GeneratePPTRequest):
