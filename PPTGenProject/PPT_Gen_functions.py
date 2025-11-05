@@ -400,11 +400,12 @@ def generate_ppt_content(
     from openai.types.chat import ChatCompletionUserMessageParam
 
     messages = [ChatCompletionUserMessageParam(role="user", content=prompt)]
-
+# use json response
     response = client.chat.completions.create(
         model=model_path,
         messages=messages,
         stream=False,
+        response_format={"type": "json_object"},
     )
 
     return response.choices[0].message.content or ""

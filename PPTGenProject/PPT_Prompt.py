@@ -11,7 +11,7 @@ def get_ppt_generation_prompt(user_input: str, expected_slides: Optional[int] = 
 用戶傳入嘅ppt內容：{user_input}
 期望嘅幻燈片數量：{expected_slides}頁
 
-請根據用戶嘅需求分析主題、內容，然後生成一個幻燈片嘅演示文稿。
+請根據用戶嘅需求分析主題、內容，然後生成一個幻燈片嘅演示文稿,一定要是書面語言，不要口語化。
 嚴格根據知識點嘅語言，使用**繁體中文**或**英語**，不要使用**簡體中文**。
 
 請按照以下JSON格式返回：

@@ -39,6 +39,7 @@ def call_openai_api(prompt: str, system_prompt: str) -> str:
             ],
             temperature=0.7,
             max_tokens=4000,
+            response_format={"type": "json_object"},
         )
 
         content = response.choices[0].message.content
@@ -171,10 +172,8 @@ def create_word_document(context_data: Dict[str, Any], output_filename: str) -> 
         doc.render(context_data)
 
         # 保存文档
-        output_path = os.path.join(
-            PATHS["output_folder"], f"{output_filename}.docx"
-        )
-        
+        output_path = os.path.join(PATHS["output_folder"], f"{output_filename}.docx")
+
         # 确保输出目录存在
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
