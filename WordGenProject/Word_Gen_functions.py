@@ -14,7 +14,8 @@ from WordGenProject.Word_Prompt import (
     get_agent_system_prompt,
 )
 from FileRequestServer.config import LOGGING_CONFIG, OPENAI_CONFIG, WORD_CONFIG, PATHS
-
+import opencc
+converter_hk = opencc.OpenCC('s2hk')
 
 def call_openai_api(prompt: str, system_prompt: str) -> str:
     """
@@ -132,7 +133,8 @@ def generate_document_content(
         get_word_generation_prompt(learning_content, user_requirements),
         get_agent_system_prompt(),
     )
-
+    # 如果是简体，那么转换为繁体
+    ai_response = converter_hk.convert(ai_response)
     if LOGGING_CONFIG.get("show_ai_response", True):
         print(f"🔍 AI原始响应: {ai_response}")
 

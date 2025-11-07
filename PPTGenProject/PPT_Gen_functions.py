@@ -7,7 +7,8 @@ import os
 from PPTGenProject.PPT_Prompt import get_ppt_generation_prompt
 from openai import OpenAI
 from FileRequestServer.config import OPENAI_CONFIG, PPT_CONFIG, PATHS, LOGGING_CONFIG
-
+import opencc
+converter_hk = opencc.OpenCC('s2hk')
 
 def generate_table_of_contents(slides_data: List[Dict[str, Any]]) -> Dict[str, Any]:
     """根据幻灯片内容生成目录"""
@@ -445,6 +446,8 @@ def generate_ppt_from_user_input(
     content = generate_ppt_content(
         user_input, expected_slides, base_url, api_key, model_path
     )
+    # 如果是简体，那么转换为繁体
+    content = converter_hk.convert(content)
     if LOGGING_CONFIG["show_progress"]:
         print("✅ GPT内容生成完成！")
 
